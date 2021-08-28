@@ -14,14 +14,15 @@ export interface Props {
     openForm: (id: string) => void;
     closeForm: () => void;
     createOrEdit: (activity: Activity) => void;
-    deleteActivity: (id: string) => void
+    deleteActivity: (id: string) => void;
+    submitting: boolean;
 }
 
-const ActivityDashboard = ({ activities, selectedActivity, deleteActivity, selectActivity, cancelSelectActivity, editMode, openForm, closeForm, createOrEdit }: Props) => {
+const ActivityDashboard = ({ activities, selectedActivity, submitting, deleteActivity, selectActivity, cancelSelectActivity, editMode, openForm, closeForm, createOrEdit }: Props) => {
     return (
         <Grid>
             <Grid.Column width="10">
-                <ActivityList activities={activities} deleteActivity={deleteActivity} selectActivity={selectActivity}></ActivityList>
+                <ActivityList activities={activities} submitting={submitting} deleteActivity={deleteActivity} selectActivity={selectActivity}></ActivityList>
             </Grid.Column>
             <Grid.Column width="6">
                 {selectedActivity && !editMode && <ActivityDetails
@@ -29,7 +30,7 @@ const ActivityDashboard = ({ activities, selectedActivity, deleteActivity, selec
                     cancelSelectActivity={cancelSelectActivity}
                     openForm={openForm}
                 ></ActivityDetails>}
-                {editMode && <ActivityForm closeForm={closeForm} activity={selectedActivity} createOrEdit={createOrEdit}></ActivityForm>}
+                {editMode && <ActivityForm closeForm={closeForm} submitting={submitting} activity={selectedActivity} createOrEdit={createOrEdit}></ActivityForm>}
             </Grid.Column>
         </Grid>
     );
