@@ -1,15 +1,13 @@
+import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 import { Button, Form, Segment } from 'semantic-ui-react';
-import { Activity } from '../../../app/layout/models/activity';
+import { useStore } from '../../../app/stores/store';
 
-export interface Props {
-    activity: Activity | undefined;
-    closeForm: () => void;
-    createOrEdit: (activity: Activity) => void;
-    submitting: boolean;
-}
 
-const ActivityForm = ({ activity: selectedActivity, closeForm, createOrEdit, submitting }: Props) => {
+
+const ActivityForm = () => {
+    const { activityStore } = useStore();
+    const { selectedActivity, closeForm, createActivity, updateActivity, loading } = activityStore;
     const initialState = selectedActivity ?? {
         id: "",
         title: "",
@@ -21,7 +19,7 @@ const ActivityForm = ({ activity: selectedActivity, closeForm, createOrEdit, sub
     }
     const [activity, setActivity] = React.useState(initialState);
     function handleSubmit() {
-        createOrEdit(activity);
+        activity.id ? updateActivity(activity) : createActivity(activity)
     }
     function handleInputChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
         const { name, value } = event.target;
@@ -36,11 +34,11 @@ const ActivityForm = ({ activity: selectedActivity, closeForm, createOrEdit, sub
                 <Form.Input placeholder="Date" type="date" value={activity.date} name="date" onChange={handleInputChange}></Form.Input>
                 <Form.Input placeholder="City" value={activity.city} name="city" onChange={handleInputChange}></Form.Input>
                 <Form.Input placeholder="Venue" value={activity.venue} name="venue" onChange={handleInputChange}></Form.Input>
-                <Button floated="right" loading={submitting} content="Submit" type="submit" positive></Button>
+                <Button floated="right" loading={loading} content="Submit" type="submit" positive></Button>
                 <Button floated="right" onClick={closeForm} content="Cancel" color="grey" type="button" ></Button>
             </Form>
         </Segment>
     );
 }
 
-export default ActivityForm;
+export default observer(ActivityForm);
