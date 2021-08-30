@@ -6,10 +6,14 @@ import './app/layout/styles.css';
 
 import reportWebVitals from './reportWebVitals';
 import { store, storeContext } from './app/stores/store';
+import { BrowserRouter } from 'react-router-dom';
 
 ReactDOM.render(
   <storeContext.Provider value={store}>
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+
   </storeContext.Provider>
   ,
   document.getElementById('root')
